@@ -29,7 +29,7 @@ jobs:
         zip -r ./output/template.zip ./output/*
 
     - name: Upload ZIP artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: template-zip
         path: ./output/template.zip
