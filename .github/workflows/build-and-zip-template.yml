@@ -1,4 +1,4 @@
-name: Build and Zip Template
+name: Build, Pack and Release Template
 
 on:
   push:
@@ -33,3 +33,19 @@ jobs:
       with:
         name: template-zip
         path: ./output/template.zip
+
+    - name: Get version from project
+      id: get_version
+      run: echo "VERSION=$(cat ConsoleExtended.csproj | grep -oP '(?<=<Version>).*?(?=</Version>)')" >> $GITHUB_ENV
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ env.VERSION }}
+        release_name: "Release v${{ env.VERSION }}"
+        draft: false
+        prerelease: false
+        files: |
+          ./output/ConsoleExtended.${{ env.VERSION }}.nupkg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
